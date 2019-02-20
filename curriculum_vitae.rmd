@@ -9,9 +9,9 @@ knitr::opts_chunk$set(echo = TRUE)
 # Curiculum Vitae: Cory Bates Gargas  
 ___________________________________________________________________________________________________________________________  
   
-**Home address:** 2018 W Custer LN, Fayetteville, AR 72701
+**Home address:** 2018 W Custer LN, Fayetteville, AR 72701  
 **Office address:** Alverson Lab, Inversity of Arkansas, Department of Biological Sciences, Fayetteville, AR 72701  
-**Phone:** (330) 931-5647
+**Phone:** (330) 931-5647  
 **email:** corygargas@gmail.com, cbgargas@uark.edu   
 **Website:** corybgargas.com  
 ___________________________________________________________________________________________________________________________  
@@ -23,7 +23,12 @@ ________________________________________________________________________________
 **M.Sc.** 2018, John Carroll University (JCU), Department of Biology, John Carroll University, University Heights, OH 44118. Advisor: Dr. Jeffrey R. Johansen.  
   
 **B.Sc.** 2013, Kent State University (KSU), Department of Biology, Kent State University, Kent, OH 44240. Advisor: Dr. Ferenc de Szalay.  
+
+
+#### PUBLISHED LITERATURE
   
+Gargas CB, Theriot EC, Ashworth MP, Johansen JR (2018). **Phylogenetic Analysis Reveals that the ‘Radial Centric’ Diatom Orthoseira Thwaites (Orthoseiraceae, Bacillariophyta) is a Member of a ‘Multipolar’ Diatom Lineage.** *Protist.* 169(6):803-825.  
+    
 #### RELEVANT COURSEWORK
 *UARK:*  
 **Evolutionary Ecology,** Biological Sciences Department, Dr. Adam Siepielski, UARK  
@@ -47,12 +52,8 @@ Teaching Assistant for Human Anantomy (BIOL) Contact: Jason Ortega jxo001@uark.e
 *JCU:* 	
 Teaching Assistant for Principles of Biology I,II,& III Lab (BL-157L, BL-156L, & BL-160L). Contact: Cathy Wheeler cwheeler@jcu.edu & Dr. Christopher Sheil csheil@jcu.edu, respectively.  
 Teaching Assistant for Environmental Biology Lab (BL-109L). Contact: Dr. Kal Tuominen ktuominen@jcu.edu  
-
-#### PUBLISHED LITERATURE
-
-Gargas CB, Theriot EC, Ashworth MP, Johansen JR (2018). **Phylogenetic Analysis Reveals that the ‘Radial Centric’ Diatom Orthoseira Thwaites (Orthoseiraceae, Bacillariophyta) is a Member of a ‘Multipolar’ Diatom Lineage.** *Protist.* 169(6):803-825.  
-
-#### PROFESSIONAL EXPERIENCE
+  
+#### PROFESSIONAL EXPERIENCE  
 
 **JCU Cyanobacteria Collection curator,** 2016–2018, Department of Biology, JCU  
 **Field & laboratory technician,** 2014–2016, EnviroScience Inc., Northeast Headquarters. Stow, OH 44224  
@@ -106,5 +107,4 @@ Project experience
 
 #### POSTER PRESENTATIONS (Bold-face indicates presenter)  
 **Gargas CB** (2017). A Floristic Study of Seasonal Changes in Wetwall Diatom (Bacillariophyta) Communities of Virginia-Kendall National Park, Peninsula, OH. Meetings of PSA (Monterey, CA) & NADS (South Bass Island, OH).  
-
-
+  
