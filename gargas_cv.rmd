@@ -7,104 +7,198 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
   
 # Curiculum Vitae: Cory Bates Gargas  
+<div class = "row">
+<div class = "col-md-6">
+<br>
 ___________________________________________________________________________________________________________________________  
-  
-**Home address:** 2018 W Custer LN, Fayetteville, AR 72701  
-**Office address:** Alverson Lab, Inversity of Arkansas, Department of Biological Sciences, Fayetteville, AR 72701  
+**Home address:** 2018 W Custer LN, Fayetteville, AR 72701   
 **Phone:** (330) 931-5647  
-**email:** corygargas@gmail.com, cbgargas@uark.edu   
-**Website:** corybgargas.com  
-___________________________________________________________________________________________________________________________  
-  
-#### EDUCATION  
-  	
-**Ph.D.** 2018–present, University of Arkansas (UARK), Expected completion date: May 2024, Department of Biological Sciences, University of Arkansas, Fayetteville, AR 72701. Advisor: Dr. Andrew J. Alverson.  
-  
-**M.Sc.** 2018, John Carroll University (JCU), Department of Biology, John Carroll University, University Heights, OH 44118. Advisor: Dr. Jeffrey R. Johansen.  
-  
-**B.Sc.** 2013, Kent State University (KSU), Department of Biology, Kent State University, Kent, OH 44240. Advisor: Dr. Ferenc de Szalay.  
+**email:** corygargas@gmail.com  
+**Website:** corybgargas.com 
+___________________________________________________________________________________________________________________________
+</div>
 
-
+<div class = "col-md-6">
+<br>
+___________________________________________________________  
+**Office address:** Alverson Lab, Inversity of Arkansas, Department of Biological Sciences, Fayetteville, AR 72701  
+**email:** cbgargas@uark.edu  
+**Website:** alversonlab.com
+___________________________________________________________
+</div>  
+ 
 #### PUBLISHED LITERATURE
+
+<div class = "row">
+<div class = "col-md-2">
+ **2018**
+</div> 
+
+<div class = "col-md-10">
+Gargas CB, Theriot EC, Ashworth MP, Johansen JR. **Phylogenetic Analysis Reveals that the ‘Radial Centric’ Diatom Orthoseira Thwaites (Orthoseiraceae, Bacillariophyta) is a Member of a ‘Multipolar’ Diatom Lineage.** *Protist.* 169(6):803-825. 
+</div>
+
+#### EDUCATION  
   
-Gargas CB, Theriot EC, Ashworth MP, Johansen JR (2018). **Phylogenetic Analysis Reveals that the ‘Radial Centric’ Diatom Orthoseira Thwaites (Orthoseiraceae, Bacillariophyta) is a Member of a ‘Multipolar’ Diatom Lineage.** *Protist.* 169(6):803-825.  
-    
+<div class = "row">
+<div class = "col-md-2">
+**2018-Present**  
+<br>
+**2018** 
+<br>
+**2013**
+</div>
+  
+<div class = "col-md-10">
+**Ph.D.,** University of Arkansas (UARK), Expected completion date: May 2024, Department of Biological Sciences, University of Arkansas, Fayetteville, AR 72701. Advisor: Dr. Andrew J. Alverson.  
+**M.Sc.,** John Carroll University (JCU), Department of Biology, John Carroll University, University Heights, OH 44118. Advisor: Dr. Jeffrey R. Johansen.  
+**B.Sc.,** Kent State University (KSU), Department of Biology, Kent State University, Kent, OH 44240. Advisor: Dr. Ferenc de Szalay.  
+</div>
+
 #### RELEVANT COURSEWORK
-*UARK:*  
+
+<div class = "row">
+<div class = "col-md-2">
+**UARK:**
+<br>
+<br>
+<br>
+<br>
+**JCU:**  
+</div>
+<div class = "col-md-10">
 **Evolutionary Ecology,** Biological Sciences Department, Dr. Adam Siepielski, UARK  
 **Programming for Biologists,** Biological Sciences Department, Dr. Jeremy Beaulieu, UARK  
 **Molecular Phylogenetics,** Biological Sciences Department, Dr. Andrew Alverson, UARK  
-  
-*JCU:*	
+<br>
 **Experimental Design & Analysis,** Department of Biology, Dr. Jennifer Murphy, JCU  
 **Plant Ecology,** Department of Biology, Prof. Dr. Rebecca Drenovsky, JCU  
 **Algae as Bioindicators,** Department of Biology, Prof. Dr. Jeffrey R. Johansen, JCU  
 **Geographic Information Systems,** Department of Biology, Prof. Dr. James I. Watling, JCU  
 **Scientific Illustration,** Department of Biology, Prof. Dr. Christopher Sheil, JCU  
 **Aquatic Resources,** Department of Biology, Prof. Dr. Jeffrey R. Johansen, JCU  
-  
-#### TEACHING EXPERIENCE  
+</div>
 
-*UARK:*  
-Teaching Assistant for Principles of Biology Lab (BIOL) Contact: Dr. Lora Shadwick lalindl@uark.edu  
-Teaching Assistant for Human Anantomy (BIOL) Contact: Jason Ortega jxo001@uark.edu  
-
-*JCU:* 	
-Teaching Assistant for Principles of Biology I,II,& III Lab (BL-157L, BL-156L, & BL-160L). Contact: Cathy Wheeler cwheeler@jcu.edu & Dr. Christopher Sheil csheil@jcu.edu, respectively.  
+#### TEACHING EXPERIENCE    
+<div class = "row">
+<div class = "col-md-2">
+**UARK:**  
+<br>
+<br>
+**JCU:** 	
+</div>
+<div class = "col-md-10">
+Teaching Assistant for Principles of Biology Lab (BIOL1541L) Contact: Dr. Lora Shadwick lalindl@uark.edu  
+Teaching Assistant for Human Anantomy (BIOL2441L) Contact: Jason Ortega jxo001@uark.edu  
+<br>
+Teaching Assistant for Principles of Biology I, II, & III Lab (BL-157L, BL-156L, & BL-160L). Contact: Cathy Wheeler cwheeler@jcu.edu & Dr. Christopher Sheil csheil@jcu.edu, respectively.  
 Teaching Assistant for Environmental Biology Lab (BL-109L). Contact: Dr. Kal Tuominen ktuominen@jcu.edu  
-  
+</div>
+
 #### PROFESSIONAL EXPERIENCE  
+<div class = "row">
+<div class = "col-md-2">
+**2016-2018**
+<br>
+<br>
+**2014-2016**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+**2012**
+</div>
 
-**JCU Cyanobacteria Collection curator,** 2016–2018, Department of Biology, JCU  
-**Field & laboratory technician,** 2014–2016, EnviroScience Inc., Northeast Headquarters. Stow, OH 44224  
-Project experience  
-  
-+ National Rivers & Streams Assessment, 2013–2014  
-+ USGS Waukegan Harbor Phytoplankton & Zooplankton assessment, 2015  
-+ Cleveland Hopkins Airport Biofilm Project, 2014-2016  
-+ Individual Chlorophyll-a analysis contracts  
-+ Individual Harmful algal bloom testing contracts  
-+ Individual common toxicity testing contracts  
-  
-**Research Assistant,** 2012, Department of Biological Sciences, KSU  
+<div class = "col-md-10">
+**JCU Cyanobacteria Collection curator,** Department of Biology, JCU  
+<br>
+**Field & laboratory technician,** EnviroScience Inc., Northeast Headquarters. Stow, OH 44224  
+*Project experience:*  
+*National Rivers & Streams Assessment* (2013–2014)  
+*USGS Waukegan Harbor Phytoplankton & Zooplankton assessment* (2015)  
+*Cleveland Hopkins Airport Biofilm Project* (2014-2016)  
+*Individual Chlorophyll-a analysis contracts*  
+*Individual Harmful algal bloom testing contracts*  
+*Individual common toxicity testing contracts*  
 
-#### RESEARCH SKILLS
-+ **Culture media preparation:** Preparation of Z8 & WC media agar plates, slants, & liquid media.  
-+ **Algal culturing:** Experienced in isolating unialgal cultures from field samples & maintenance of established cultures, & transfer of cultures in solid & liquid media substrates.    
-+ **Bioinformatics:** Experienced in coding, analyzing data, & generating publication quality figures in R (via R studio), Experienced with using the following phylogenetics programs: IQ-Tree, MrBayes, PartitionFinder2, RAxML, Geneious, Sequencher.  
-+ **Coding:** experienced in coding using R and unix languages
-+ **Molecular Techniques:** DNA extraction, amplification of nuclear (18S& 28S) & chloroplast (rbcL, psbC, psaB, & psbA) genes, gel electrophoresis, & molecular cloning.  
-+ **Scientific illustration:** Illustration of biological material using ink, graphite, & digital mediums.  
-+ **Taxonomic identification:** Proficient in the identification of diatoms to species level, experienced in identifying macroinvertebrates, cyanobacteria, & other freshwater algal phyla to genus level.  
-+ **Herbarium sample preparation:** Preparation of permanent diatom herbarium slides via chemical digestion & Naphrax mountant.  
-+ **Photomicrography:** Use of integrated light microscope cameras to obtain high-quality photomicrographs, & videos, of algae, zooplankton, macroinvertebrates, & meiofauna.  
-+ **Scanning electron microscopy:** Experienced in sample preparation for and obtaining images using scanning electron microscopes.  
-+ **Freshwater Sampling techniques:** Experienced in utilizing Van Dorn samplers, Eckman dredges, Zoo- & Phytoplankton sampling via plankton nets, Kick-netting, & Heseter-dendy samplers.  
-+ **Figure preparation:** Experienced in producing figures for scientific publications & conference materials using Adobe Illustrator, Adobe Photoshop, and R.  
-+ **Plant community sampling methods:** Experienced in both plotless (line/belt transect; Point Centered Quarter (PCQ) Method) & plot-based (American quadrat) methods.  
-+ Quantitative & qualitative collection of periphyton & plankton samples.  
-+ Collection of samples using the composite sampling method for algal toxin testing.  
-+ Preparation of soft algae samples & diatom slides from periphytic & planktonic samples for microscopic analysis.  
-+ Preparation of phytoplankton samples for analysis using the Utermöhl method.  
-+ Assessing diatom slides to ensure quality & to facilitate taxonomic identification.  
-+ Taxonomic identification & enumeration of freshwater diatoms to species level.  
-+ Sample organization, preservation, & archival.  
-+ Analysis of ash-free dry weight, ATP, & chlorophyll-a (via spectrophotometric methods).  
-+ Short-term Methods for Estimating the Chronic Toxicity of Effluents & Receiving Water for  Freshwater Organisms: 7-day Ceriodaphnia dubia (water flea) survival & reproduction; 7-day Pimephales promelas (fathead minnow) growth & survival  
-+ Culturing of Pimephales promelas, Ceriodaphia dubia, & Daphnia magna  
+**Research Assistant,** Department of Biological Sciences, KSU  
+</div>  
+
+
+#### RESEARCH SKILLS  
+<div class = "row">
+<div class = "col-md-6">
+**Bioinformatics:** RStudio, IQ-Tree, RAxML, MrBayes, PartitionFinder2, SSU-ALIGN, Geneious, Sequencher  
+**Coding:** experienced in coding using R and unix languages  
+**Molecular Techniques:** DNA extraction, PCR amplification, gel electrophoresis, & molecular cloning.  
+**Taxonomic identification:** Proficient in species-level identification of diatoms. Experienced in identifying macroinvertebrates, freshwater fishes, & other algal phyla to genus level.  
+**Culture media preparation:** Preparation of culture media for photosynthetic microalgae (Z8 & WC).  
+**Algal culturing:** Isolation and maintenance of unialgal cultures
+**Scientific illustration:** Illustration of biological material using ink, graphite, & digital mediums.  
+**Herbarium sample preparation:** Preparation of permanent diatom herbarium slides via chemical digestion & Naphrax mountant. Archival of soft-bodied algae. 
+**Photomicrography:** Experienced in obtaining images using light microscopy & Scanning electron microscopy.  
+**Figure preparation:** Experienced in producing figures for scientific publications & conference materials using Adobe Illustrator, Adobe Photoshop, and R.  
+</div>  
+
+<div class = "col-md-6">
+**Sampling methods:** Experienced in both plotless (line/belt transect) Point Centered Quarter (PCQ) Method) & plot-based (American quadrat) methods. Quantitative & qualitative collection of periphyton & plankton samples. Collection of samples using the composite sampling method for algal toxin testing. Experienced in the use of Van Dorn samplers, Eckman dredges, Zoo- & Phytoplankton sampling via plankton nets, Kick-netting, & Heseter-dendy samplers.  
+**Algae sample preparation:** Preparation of soft algae samples & diatom slides from periphytic & planktonic samples for microscopic analysis. Preparation of phytoplankton samples for analysis using the Utermöhl method.  
+Analysis of ash-free dry weight, ATP, & chlorophyll-a (via spectrophotomety & fluorescence methods).  
+**Bioassay:** Short-term Methods for Estimating the Chronic Toxicity of Effluents & Receiving Water for  Freshwater Organisms: 7-day Ceriodaphnia dubia (water flea) survival & reproduction; 7-day Pimephales promelas (fathead minnow) growth & survival. Culturing of Pimephales promelas, Ceriodaphia dubia, & Daphnia magna  
+</div>
 
 #### PROFESSIONAL AFFILIATIONS
-+ **Phycological Society of America**  
-+ **International society for Diatom Research**  
+<div class = "row">
+<div class = "col-md-2">
+**2019-present**
+**2019-present**
+**2017-present** 
+</div>
 
-#### WORKSHOPS ATTENDED  
-**Diatom Taxonomy** (2016). Dr. Matt Julius, 70th annual meeting of the Phycological Society of America, Cleveland, OH  
-**Scientific Illustration of Algae: tips & issues for preparing publication quality illustrations** (2016). Dr. Christopher Sheil, 70th annual meeting of the Phycological Society of America, Cleveland, OH  
-**Introduction to Metabarcoding Data Analysis Workshop** (2017). Emily Johnston. 71st annual meeting of the Phycological Society of America, Monterey, OH  
+<div class = "col-md-10">
+**International society for Diatom Research (ISDR)**  
+**International Association for Plant Taxonomy (IAPT)**  
+**Phycological Society of America (PSA)**  
+</div>
+
+#### WORKSHOPS ATTENDED 
+<div class = "row">
+<div class = "col-md-1">
+**2017**  
+<br>
+**2016**  
+**2016**  
+</div>
+
+<div class = "col-md-11">
+**Introduction to Metabarcoding Data Analysis Workshop** Emily Johnston. 71st annual meeting of the Phycological Society of America, Monterey, OH  
+**Diatom Taxonomy** Dr. Matt Julius, 70th annual meeting of the Phycological Society of America, Cleveland, OH  
+**Scientific Illustration of Algae: tips & issues for preparing publication quality illustrations** Dr. Christopher Sheil, 70th annual meeting of the Phycological Society of America, Cleveland, OH  
+</div>
 
 #### GRANTS & AWARDS (Total of $500.00)  
-**JCU Student Support Conference Grants** (2017). Dept. of Biology, JCU. To attend meetings of the annual meeting of the Phycological Society of America (PSA) & the North American Diatom Synmposium (NADS) & present research. $250.00 for each conference.  
+<div class = "row">
+<div class = "col-md-1">
+**2017**  
+</div>
+
+<div class = "col-md-11">
+**JCU Student Support Conference Grants** Dept. of Biology, JCU. To attend meetings of the annual meeting of the Phycological Society of America (PSA) & the North American Diatom Synmposium (NADS) & present research. $250.00 for each conference.  
+</div>
 
 #### POSTER PRESENTATIONS (Bold-face indicates presenter)  
-**Gargas CB** (2017). A Floristic Study of Seasonal Changes in Wetwall Diatom (Bacillariophyta) Communities of Virginia-Kendall National Park, Peninsula, OH. Meetings of PSA (Monterey, CA) & NADS (South Bass Island, OH).  
-  
+<div class = "row">
+<div class = "col-md-1">
+**2017**  
+</div>
+
+<div class = "col-md-11">
+**Gargas CB.** A Floristic Study of Seasonal Changes in Wetwall Diatom (Bacillariophyta) Communities of Virginia-Kendall National Park, Peninsula, OH. Meetings of PSA (Monterey, CA) & NADS (South Bass Island, OH).  
+</div>
+<br>
+<br>
