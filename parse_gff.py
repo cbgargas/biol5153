@@ -35,44 +35,41 @@ for line in gff:
 	#print(start, end)
 	#print(start_n, end_n)
 
-	#extract the DNA seq from the genome
-	#.gff files are from 1, so we need to either add or subtract one to get it to grab the right seq bits
-	for char in seq:	
+#extract the DNA seq from the genome
+	#define feature coordinates for python
+	start_n=int(start)-1
+	end_n=int(end)+1
+	
+	#create substring to pull feeature from
+	substring=seq[start_n:end_n]
+	
+	#print feature coordinates
+	print(start+':'+end)
+	
+	#print the DNA seq of this feature
+	print(substring)
 
-		#define feature coordinates for python
-		start_n=int(start)-1
-		end_n=int(end)+1
-		
-		#create substring to pull feeature from
-		substring=seq[start_n:end_n]
-		
-		#print feature coordinates
-		print(start+':'+end)
-		
-		#print the DNA seq of this feature
-		print(substring)
+# calculate the GC content for this feature
+	#calculates length of substring
+	sequence_length = len(substring)
 
-	# calculate the GC content for this feature
-		#calculates length of substring
-		sequence_length = len(substring)
+#calculates number of respective nucleotide in substring
+	#numA = substring.count('A')
+	numC = substring.count('C')
+	numG = substring.count('G')
+	#numT = substring.count('T')
 
-	#calculates number of respective nucleotide in substring
-		#numA = substring.count('A')
-		numC = substring.count('C')
-		numG = substring.count('G')
-		#numT = substring.count('T')
+#calulates freq of A,C,G,T
+	#freqA = ((numA/sequence_length)*100)
+	freqC = ((numC/sequence_length)*100)
+	freqG = ((numG/sequence_length)*100)
+	#freqT = ((numT/sequence_length)*100)
 
-	#calulates freq of A,C,G,T
-		#freqA = ((numA/sequence_length)*100)
-		freqC = ((numC/sequence_length)*100)
-		freqG = ((numG/sequence_length)*100)
-		#freqT = ((numT/sequence_length)*100)
-
-	#print the output
-		#print('freq of A: %.2f' % freqA)
-		print('freq of G: %.2f,' % freqG, 'freq of C: %.2f' % freqC)
-		#print('freq of T: %.2f' % freqT)
-		break		
+#print the output
+	#print('freq of A: %.2f' % freqA)
+	print('freq of G: %.2f,' % freqG, 'freq of C: %.2f' % freqC)
+	#print('freq of T: %.2f' % freqT)
+	
 #close the files 		
 gff.close()
 fasta.close()
