@@ -12,6 +12,8 @@ library(reticulate)
 
 ### Pre-analysis data clean-up:  
 
+Scripts mentioned in this project journal that are present in the deliverables folder appear in __BOLD__.  
+
 #### fixing LTP reference files
 
 There were several issues with the LTP reference files that needed to be remediated before they could be used.  
@@ -20,14 +22,14 @@ There were several issues with the LTP reference files that needed to be remedia
 3.  The sequence names in the fasta file and the tip names in the tree file were different, making it impossible to actually map those sequences onto their     reference tree.  
 4.  The acutal fasta headers and tip labels were all gratuitously long and contained unnecessary information, so I wanted to clean those up to just contain the following: accession#_taxonomy(genus, species, family, etc.).  
 
-To fix these issues I created a python script to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.  
-This python script is __'LTP_fasta_and_tree_renamer.py'__
+To fix these issues I created a python script  __(LTP_fasta_and_tree_renamer.py)__ to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.  
+This python script is
 
 #### Sequence assignment, filtering, alignment via SSU-ALIGN 
   
 Using the ttol_rrna dataset created by [AJA](https://www.youtube.com/watch?v=JzrDs_Vaho4&list=PL8a8cutYP7fodkZK1G6kK00rVwhMCy4_F), I created a script to assemble ssu-align commands for each of the extracted transcriptome .fa (unaligned fasta) files.  
   
-The file containing this code is named "ssu-align-bash-script-assembly.sh" and contains the code blocked below:  
+The file containing this code is named __"ssu-align-bash-script-assembly.sh"__ and contains the code blocked below:  
 <pre><code>#! /bin/bash
 
 echo '#! /bin/bash' > ssu-align_ttol-cmds.sh  
@@ -57,7 +59,7 @@ This file ends up producing the usual SSU-ALIGN output for each .fa file inside 
   
 The respective output folders for each of the filtering runs are contained in the ttol_rrna folder and are appended with '_all', '_250bp', and '_500bp' for each respective set of analyses.  
 
-I then used the following codes to concatenate the bacterial and archael sequences for each analysis... 
+I then used the following codes to concatenate the bacterial and archaeal sequences for each analysis... 
   
 <pre><code>cat */*.archaea.fa > archaea_250bp.fa;    
 cat */*.bacteria.fa > bacteria_250bp.fa;  
@@ -65,7 +67,7 @@ cat */*.archaea.fa > archaea_500bp.fa;
 cat */*.bacteria.fa > bacteria_500bp.fa;  
 </code></pre> 
   
-...then I made a .sh script (compare-analyses.sh) to grep ">" for each file to figure out the difference in # of bacterial and archaeic sequences between analyses.  
+...then I made a .sh script __(compare-analyses.sh)__ to grep ">" for each file to figure out the difference in # of bacterial and archaeic sequences between analyses.  
 
 <pre><code>#! /bin/bash
 #creates a .sh script to create a file containing the # of sequences of the different ssu-align analyses';
@@ -87,10 +89,10 @@ grep -c ">" 2019-02-27_output_500bp/bacteria_500bp.fa >> compare-analyses.txt;
   
 Table 1. Results of successive SSU-ALIGN filtering (compiled from compare-analyses.txt content).  
   
-Kingdom | All | 250bp | 500bp  
---- | --- | --- | ---  
-Archaea | 67 | 57 | 31  
-Bacteria | 18385 | 11865 | 2508  
+Kingdom | All | 250bp  
+--- | --- | --- 
+Archaea | 67 | 57   
+Bacteria | 18385 | 11865 
   
 Andy wants to continue the filtering with just the 250bp aND 500bp datasets  
   
@@ -130,7 +132,7 @@ Andy thinks green genes might be the one to use, SILVA and RDP also seem to be o
 #### Distribution of sequence lengths by dataset  
 ##### Date: 2019-03-05  
 
-Originally, I concatenated all of the archaea and bacteria sequences for each minimum length using the following .sh script  
+Originally, I concatenated all of the archaea and bacteria sequences for each minimum length using a bash script __(cat-ssualign-out.sh)__  
   
 <pre><code>#! /bin/bash  
 #concatenates bacteria archaea seqs from each filtering for use in   

@@ -384,6 +384,7 @@ $(document).ready(function () {
 
 <div id="pre-analysis-data-clean-up" class="section level3">
 <h3>Pre-analysis data clean-up:</h3>
+<p>Scripts mentioned in this project journal that are present in the deliverables folder appear in <strong>BOLD</strong>.</p>
 <div id="fixing-ltp-reference-files" class="section level4">
 <h4>fixing LTP reference files</h4>
 <p>There were several issues with the LTP reference files that needed to be remediated before they could be used.<br />
@@ -391,13 +392,13 @@ $(document).ready(function () {
 2. The fasta file sequences had a mix of periods and hyphens to represent missing sites, so I needed to repalce periods with hyphens.<br />
 3. The sequence names in the fasta file and the tip names in the tree file were different, making it impossible to actually map those sequences onto their reference tree.<br />
 4. The acutal fasta headers and tip labels were all gratuitously long and contained unnecessary information, so I wanted to clean those up to just contain the following: accession#_taxonomy(genus, species, family, etc.).</p>
-<p>To fix these issues I created a python script to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.<br />
-This python script is ‘LTP_fasta_and_tree_renamer.py’</p>
+<p>To fix these issues I created a python script <strong>(LTP_fasta_and_tree_renamer.py)</strong> to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.<br />
+This python script is</p>
 </div>
 <div id="sequence-assignment-filtering-alignment-via-ssu-align" class="section level4">
 <h4>Sequence assignment, filtering, alignment via SSU-ALIGN</h4>
 <p>Using the ttol_rrna dataset created by <a href="https://www.youtube.com/watch?v=JzrDs_Vaho4&amp;list=PL8a8cutYP7fodkZK1G6kK00rVwhMCy4_F">AJA</a>, I created a script to assemble ssu-align commands for each of the extracted transcriptome .fa (unaligned fasta) files.</p>
-The file containing this code is named “ssu-align-bash-script-assembly.sh” and contains the code blocked below:<br />
+The file containing this code is named <strong>“ssu-align-bash-script-assembly.sh”</strong> and contains the code blocked below:<br />
 
 <pre><code>#! /bin/bash
 
@@ -422,13 +423,13 @@ chmod u+x ssu-align_ttol-cmds.sh
 <p>The file [yr-mo-day]_stdout.txt then contains the stdout for each command of ssu-align run by “ssu-align_ttol-cmds.sh”</p>
 <p>This file ends up producing the usual SSU-ALIGN output for each .fa file inside of a folder named for that particular .fa file that was used as input.</p>
 <p>The respective output folders for each of the filtering runs are contained in the ttol_rrna folder and are appended with ’_all’, ’_250bp’, and ’_500bp’ for each respective set of analyses.</p>
-<p>I then used the following codes to concatenate the bacterial and archael sequences for each analysis…</p>
+<p>I then used the following codes to concatenate the bacterial and archaeal sequences for each analysis…</p>
 <pre><code>cat */*.archaea.fa &gt; archaea_250bp.fa;    
 cat */*.bacteria.fa &gt; bacteria_250bp.fa;  
 cat */*.archaea.fa &gt; archaea_500bp.fa;  
 cat */*.bacteria.fa &gt; bacteria_500bp.fa;  
 </code></pre>
-<p>…then I made a .sh script (compare-analyses.sh) to grep “&gt;” for each file to figure out the difference in # of bacterial and archaeic sequences between analyses.</p>
+<p>…then I made a .sh script <strong>(compare-analyses.sh)</strong> to grep “&gt;” for each file to figure out the difference in # of bacterial and archaeic sequences between analyses.</p>
 <pre><code>#! /bin/bash
 #creates a .sh script to create a file containing the # of sequences of the different ssu-align analyses&#39;;
 
@@ -560,7 +561,7 @@ grep -c &quot;&gt;&quot; 2019-02-27_output_500bp/bacteria_500bp.fa &gt;&gt; comp
 <h4>Distribution of sequence lengths by dataset</h4>
 <div id="date-2019-03-05" class="section level5">
 <h5>Date: 2019-03-05</h5>
-<p>Originally, I concatenated all of the archaea and bacteria sequences for each minimum length using the following .sh script</p>
+<p>Originally, I concatenated all of the archaea and bacteria sequences for each minimum length using a bash script <strong>(cat-ssualign-out.sh)</strong></p>
 <pre><code>#! /bin/bash  
 #concatenates bacteria archaea seqs from each filtering for use in   
 #plotting and otu clustering  
