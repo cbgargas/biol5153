@@ -7,11 +7,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 library(reticulate)
 ```
 
@@ -26,7 +21,7 @@ There were several issues with the LTP reference files that needed to be remedia
 4.  The acutal fasta headers and tip labels were all gratuitously long and contained unnecessary information, so I wanted to clean those up to just contain the following: accession#_taxonomy(genus, species, family, etc.).  
 
 To fix these issues I created a python script to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.  
-This python script is 'LTP_fasta_and_tree_renamer.py'
+This python script is __'LTP_fasta_and_tree_renamer.py'__
 
 #### Sequence assignment, filtering, alignment via SSU-ALIGN 
   
