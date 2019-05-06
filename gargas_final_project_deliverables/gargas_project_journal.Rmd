@@ -1,6 +1,6 @@
 ---
 title: "Programming final project"
-author: "Cory B Gargas"
+author: "cbg B Gargas"
 date: "May 3, 2019"
 output: html_document
 ---
@@ -23,7 +23,6 @@ There were several issues with the LTP reference files that needed to be remedia
 4.  The acutal fasta headers and tip labels were all gratuitously long and contained unnecessary information, so I wanted to clean those up to just contain the following: accession#_taxonomy(genus, species, family, etc.).  
 
 To fix these issues I created a python script  __(LTP_fasta_and_tree_renamer.py)__ to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.  
-This python script is
 
 #### Sequence assignment, filtering, alignment via SSU-ALIGN 
   
@@ -35,7 +34,7 @@ The file containing this code is named __"ssu-align-bash-script-assembly.sh"__ a
 echo '#! /bin/bash' > ssu-align_ttol-cmds.sh  
 echo '#generates .sh file of ssu-align commands for the ttol_rrna data' >> ssu-align_ttol-cmds.sh 
 
-for file in /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/*.fa  
+for file in /home/cbg/projects/bacteria-diatom-16s/data/tol_rrna/*.fa  
  
 do   
  
@@ -44,47 +43,26 @@ echo ssu-align -l 250 $file $(basename "${file%.fa}")";" >> ssu-align_ttol-cmds.
 done
 
 chmod u+x ssu-align_ttol-cmds.sh 
-		#makes ssu-align_ttol-cmds.sh executable w/o having to mess around
+		#makes ssu-align_ttol-cmds.sh executable w/o having to chmod it in terminal  
 </code></pre>
 
-I ran the above script three times. Once, using no min length value. Then twice using -l, once for -l 250 and once for -l 500.  
-
-I then ran the three resulting bash scripts "ssu-align_ttol-cmds.sh" (Ommitting resulting code due to length) in gnome-terminal using the following command:  
-  
+I ran the above scriptusing the follow command in the terminal:  
 <pre><code>./ssu-align_ttol-cmds.sh > [yr-mo-day]_stdout.txt
 </code></pre>  
 The file [yr-mo-day]_stdout.txt then contains the stdout for each command of ssu-align run by "ssu-align_ttol-cmds.sh"  
   
-This file ends up producing the usual SSU-ALIGN output for each .fa file inside of a folder named for that particular .fa file that was used as input.  
-  
-The respective output folders for each of the filtering runs are contained in the ttol_rrna folder and are appended with '_all', '_250bp', and '_500bp' for each respective set of analyses.  
+This file ends up producing the usual SSU-ALIGN output for each .fa file inside of a folder named after the input .fa file.  
 
-I then used the following codes to concatenate the bacterial and archaeal sequences for each analysis... 
-  
+I then used the following codes to concatenate the bacterial and archaeal sequences for each domain:   
 <pre><code>cat */*.archaea.fa > archaea_250bp.fa;    
 cat */*.bacteria.fa > bacteria_250bp.fa;  
-cat */*.archaea.fa > archaea_500bp.fa;  
-cat */*.bacteria.fa > bacteria_500bp.fa;  
 </code></pre> 
   
-...then I made a .sh script __(compare-analyses.sh)__ to grep ">" for each file to figure out the difference in # of bacterial and archaeic sequences between analyses.  
+I then ran the following commands to find the total number of sequences for Archaea and Bacteria in the dataset.  
 
 <pre><code>#! /bin/bash
-#creates a .sh script to create a file containing the # of sequences of the different ssu-align analyses';
-
-touch compare-analyses.txt;
-echo Archaea_all > compare-analyses.txt;
-grep -c ">" 2019-02-26_output_all/archaea_all.fa >> compare-analyses.txt;  
-echo Archaea_250bp >> compare-analyses.txt;
 grep -c ">" 2019-02-26_output_250bp/archaea_250bp.fa >> compare-analyses.txt;
-echo Archaea_500bp >> compare-analyses.txt;
-grep -c ">" 2019-02-27_output_500bp/archaea_500bp.fa >> compare-analyses.txt;
-echo Bacteria_all >> compare-analyses.txt;
-grep -c ">" 2019-02-26_output_all/bacteria_all.fa >> compare-analyses.txt;
-echo Bacteria_250bp >> compare-analyses.txt;
 grep -c ">" 2019-02-26_output_250bp/bacteria_250bp.fa >> compare-analyses.txt;
-echo Bacteria_500bp >> compare-analyses.txt;
-grep -c ">" 2019-02-27_output_500bp/bacteria_500bp.fa >> compare-analyses.txt;
 </code></pre>
   
 Table 1. Results of successive SSU-ALIGN filtering (compiled from compare-analyses.txt content).  
@@ -92,16 +70,11 @@ Table 1. Results of successive SSU-ALIGN filtering (compiled from compare-analys
 Kingdom | All | 250bp  
 --- | --- | --- 
 Archaea | 67 | 57   
-Bacteria | 18385 | 11865 
+Bacteria | 18385 | 11865  
   
-Andy wants to continue the filtering with just the 250bp aND 500bp datasets  
-  
-
 ### sequence assignment via reference phylogeny  
-#### Which to use??  
-###### Date: 2019-02-27  
   
-We have the following options to use:  
+The following options were available to be used as reference alignments and trees:  
 
 + [Greengenes](http://greengenes.secondgenome.com/downloads)  
 + [SILVA/“All-Species Living Tree Project” (LTP)](http://www.arb-silva.de/projects/living-tree)  
@@ -123,41 +96,19 @@ EzBioCloud | Automatic? | ~63,376 | Species | Feb 2019
 NCBI | Manual | 1,522,150 | Species | All day, erry day  
 OTT | Automatic | 2,627,066 | Species | Feb 2017  
   
-Maybe an inital run using RDP or SILVA to get the best of both worlds in terms of curation and taxon placement?  
-  
-We could use them for inital genus level placement of prokaryotes, then we can trim the tree accordingly and increase taxon sampling in the clade these cluster with.  
-  
-Andy thinks green genes might be the one to use, SILVA and RDP also seem to be options.
+Decided to use the SILVA RTP database as it is the most tractable in size and is updated frequently.  
 
 #### Distribution of sequence lengths by dataset  
 ##### Date: 2019-03-05  
-
-Originally, I concatenated all of the archaea and bacteria sequences for each minimum length using a bash script __(cat-ssualign-out.sh)__  
-  
-<pre><code>#! /bin/bash  
-#concatenates bacteria archaea seqs from each filtering for use in   
-#plotting and otu clustering  
-
-cat /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/2019-02-26_output_all/*/*.bacteria.fa > cat-all.fa;  
-cat /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/2019-02-26_output_all/*/*.archaea.fa >> cat-all.fa;  
-cat /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/2019-02-26_output_250bp/*/*.bacteria.fa > cat-250bp.fa;  
-cat /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/2019-02-26_output_250bp/*/*.archaea.fa >> cat-250bp.fa;  
-cat /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/2019-02-27_output_500bp/*/*.bacteria.fa > cat-500bp.fa;  
-cat /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/2019-02-27_output_500bp/*/*.archaea.fa >> cat-500bp.fa;  
-</code></pre> 
-  
-This was unnecessary as I need to see the data attenuation in both domains, and these concatenated files wouldn't be helpful when trying to map these sequences onto reference trees.  
-I'm keeping this script here merely as an example.  
   
 I then used the following [bioawk](https://github.com/lh3/bioawk) commands to sort these files by name and sequence length into tab-delimited text files.  
   
 <pre> 
 bioawk -c fastx '{ print $name, length($seq) }' < archaea-250bp.fa > archaea-250bp-lengths.txt  
-bioawk -c fastx '{ print $name, length($seq) }' < archaea-500bp.fa > archaea-500bp-lengths.txt  
-commands for bacteria were the same as for archaea.  
+#commands for bacteria were the same as for archaea.  
 </code></pre>   
 
-The *-lengths.txt files were imported into a .r script (seq-length-plots.r) to create the following distribution plots:    
+The *-lengths.txt files were imported into the following .r code to create the following distribution plots:    
   
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
 #completed on 2019-03-06
@@ -295,20 +246,20 @@ theme_set(theme_classic())
 
 #reading in the tab delimited .txt files
 
-a99.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/archaea-250bp-cd-len.txt", header=FALSE)
-a99.500.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/archaea-500bp-cd-len.txt", header=FALSE)
-b99.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/bacteria-250bp-cd-len.txt", header=FALSE)
-b99.500.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/bacteria-500bp-cd-len.txt", header=FALSE)
+a99.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/archaea-250bp-cd-len.txt", header=FALSE)
+a99.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/archaea-500bp-cd-len.txt", header=FALSE)
+b99.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/bacteria-250bp-cd-len.txt", header=FALSE)
+b99.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/bacteria-500bp-cd-len.txt", header=FALSE)
 
-a98.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/archaea-250bp-cd-len.txt", header=FALSE)
-a98.500.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/archaea-500bp-cd-len.txt", header=FALSE)
-b98.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/bacteria-250bp-cd-len.txt", header=FALSE)
-b98.500.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/bacteria-500bp-cd-len.txt", header=FALSE)
+a98.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/archaea-250bp-cd-len.txt", header=FALSE)
+a98.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/archaea-500bp-cd-len.txt", header=FALSE)
+b98.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/bacteria-250bp-cd-len.txt", header=FALSE)
+b98.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/bacteria-500bp-cd-len.txt", header=FALSE)
 
-a97.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-250bp-cd-len.txt", header=FALSE)
-a97.500.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-500bp-cd-len.txt", header=FALSE)
-b97.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-250bp-cd-len.txt", header=FALSE)
-b97.500.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-500bp-cd-len.txt", header=FALSE)
+a97.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-250bp-cd-len.txt", header=FALSE)
+a97.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-500bp-cd-len.txt", header=FALSE)
+b97.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-250bp-cd-len.txt", header=FALSE)
+b97.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-500bp-cd-len.txt", header=FALSE)
 
 #prepare the data by removing names and combinging lists
 
