@@ -1,7 +1,7 @@
 ---
 title: "Programming final project"
-author: "cbg B Gargas"
-date: "May 3, 2019"
+author: "Cory B Gargas"
+date: "May 1, 2019"
 output: html_document
 ---
 
@@ -10,21 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(reticulate)
 ```
 
-### Pre-analysis data clean-up:  
-
 Scripts mentioned in this project journal that are present in the deliverables folder appear in __BOLD__.  
 
-#### fixing LTP reference files
-
-There were several issues with the LTP reference files that needed to be remediated before they could be used.  
-1.  The fasta file headers had a mix of spaces and tabs, so I needed to replace both of these with underscores.  
-2.  The fasta file sequences had a mix of periods and hyphens to represent missing sites, so I needed to repalce periods with hyphens.  
-3.  The sequence names in the fasta file and the tip names in the tree file were different, making it impossible to actually map those sequences onto their     reference tree.  
-4.  The acutal fasta headers and tip labels were all gratuitously long and contained unnecessary information, so I wanted to clean those up to just contain the following: accession#_taxonomy(genus, species, family, etc.).  
-
-To fix these issues I created a python script  __(LTP_fasta_and_tree_renamer.py)__ to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.  
-
-#### Sequence assignment, filtering, alignment via SSU-ALIGN 
+### __Sequence assignment, filtering, alignment via SSU-ALIGN__ 
   
 Using the ttol_rrna dataset created by [AJA](https://www.youtube.com/watch?v=JzrDs_Vaho4&list=PL8a8cutYP7fodkZK1G6kK00rVwhMCy4_F), I created a script to assemble ssu-align commands for each of the extracted transcriptome .fa (unaligned fasta) files.  
   
@@ -34,7 +22,7 @@ The file containing this code is named __"ssu-align-bash-script-assembly.sh"__ a
 echo '#! /bin/bash' > ssu-align_ttol-cmds.sh  
 echo '#generates .sh file of ssu-align commands for the ttol_rrna data' >> ssu-align_ttol-cmds.sh 
 
-for file in /home/cbg/projects/bacteria-diatom-16s/data/tol_rrna/*.fa  
+for file in /home/cory/projects/bacteria-diatom-16s/data/tol_rrna/*.fa  
  
 do   
  
@@ -46,7 +34,7 @@ chmod u+x ssu-align_ttol-cmds.sh
 		#makes ssu-align_ttol-cmds.sh executable w/o having to chmod it in terminal  
 </code></pre>
 
-I ran the above scriptusing the follow command in the terminal:  
+I ran the above script using the follow command in the terminal:  
 <pre><code>./ssu-align_ttol-cmds.sh > [yr-mo-day]_stdout.txt
 </code></pre>  
 The file [yr-mo-day]_stdout.txt then contains the stdout for each command of ssu-align run by "ssu-align_ttol-cmds.sh"  
@@ -58,21 +46,101 @@ I then used the following codes to concatenate the bacterial and archaeal sequen
 cat */*.bacteria.fa > bacteria_250bp.fa;  
 </code></pre> 
   
-I then ran the following commands to find the total number of sequences for Archaea and Bacteria in the dataset.  
+I then ran the following commands to find the total number of sequences for Archaea and Bacteria in the dataset after using SSU-ALIGN to filter sequences <250bp.  
 
 <pre><code>#! /bin/bash
 grep -c ">" 2019-02-26_output_250bp/archaea_250bp.fa >> compare-analyses.txt;
 grep -c ">" 2019-02-26_output_250bp/bacteria_250bp.fa >> compare-analyses.txt;
 </code></pre>
   
-Table 1. Results of successive SSU-ALIGN filtering (compiled from compare-analyses.txt content).  
+I then used the following [bioawk](https://github.com/lh3/bioawk) commands to sort these files by name and sequence length into tab-delimited text files.  
   
-Kingdom | All | 250bp  
+<pre> 
+bioawk -c fastx '{ print $name, length($seq) }' < archaea-250bp.fa > archaea-250bp-lengths.txt  
+#commands for bacteria were the same as for archaea.  
+</code></pre>   
+
+The *-lengths.txt files were imported into r code (In the raw .rmd file for the project journal) to create the following distribution plots:    
+  
+```{r , echo=FALSE, warning=FALSE, message=FALSE}
+#completed on 2019-03-06
+
+library(ggplot2)
+library(reshape)
+library(plyr)
+theme_set(theme_classic())
+
+#reading in the tab delimited .txt files
+a.250.len <- read.delim("~/projects/bacteria-diatom-16s/docs/proj-journal/archaea-250bp-lengths.txt", header=FALSE)
+b.250.len <- read.delim("~/projects/bacteria-diatom-16s/docs/proj-journal/bacteria-250bp-lengths.txt", header=FALSE)
+
+
+#prepare the data by removing names and combinging lists
+colnames(a.250.len)[colnames(a.250.len)=="V2"] <- "a250bp"
+colnames(b.250.len)[colnames(b.250.len)=="V2"] <- "b250bp"
+
+a.250.len = subset(a.250.len, select = -c(V1))
+b.250.len = subset(b.250.len, select = -c(V1))
+
+mcat.a.250 <- melt(a.250.len)
+mcat.b.250 <- melt(b.250.len)
+
+final <- rbind(mcat.a.250,mcat.b.250)
+
+#generates means for our plots
+final.mu <- ddply(final, "variable", summarise, grp.mean=mean(value))
+
+#labels for each plot
+hist.lab <- list(
+  'a250bp'="Archaea, total=57",
+  'b250bp'="Bacteria, total=11865"
+  )
+
+labeller <- function(variable,value){
+  return(hist.lab[value])
+}
+
+###############
+#histogram version#
+###############
+
+
+ggplot(final, aes(x=value, fill=variable)) +
+  geom_histogram(aes(x=value), binwidth = 15, alpha=0.9) +
+  scale_fill_brewer(palette="Dark2") + 
+  theme_minimal() +
+  facet_wrap(variable ~ ., scales = "free", labeller = labeller) +
+  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
+  geom_vline(data=final.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
+  scale_color_brewer(palette="Dark2")
+
+
+########################
+#histogram with density overlay#
+########################
+
+#ggplot(final, aes(x=value,fill=variable)) + 
+#  geom_histogram(aes(y=..density..), binwidth=15)+
+#  geom_density(alpha=0) +
+#  scale_fill_brewer(palette="Dark2") + 
+#  theme_minimal() +
+#  facet_wrap(variable ~ ., scales="free") +
+#  scale_y_continuous(name="density",  limits = c(0,0.008)) +
+#  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0,1750)) +
+#  geom_vline(data=mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
+#  scale_color_brewer(palette="Dark2") 
+```
+
+  
+Table 1. Results of SSU-ALIGN filtering with a minimum sequence length of 250bp.  
+  
+domain | All | 250bp  
 --- | --- | --- 
 Archaea | 67 | 57   
 Bacteria | 18385 | 11865  
+
   
-### sequence assignment via reference phylogeny  
+### __Reference phylogeny__  
   
 The following options were available to be used as reference alignments and trees:  
 
@@ -97,133 +165,27 @@ NCBI | Manual | 1,522,150 | Species | All day, erry day
 OTT | Automatic | 2,627,066 | Species | Feb 2017  
   
 Decided to use the SILVA RTP database as it is the most tractable in size and is updated frequently.  
-
-#### Distribution of sequence lengths by dataset  
-##### Date: 2019-03-05  
   
-I then used the following [bioawk](https://github.com/lh3/bioawk) commands to sort these files by name and sequence length into tab-delimited text files.  
+### __Fixing LTP reference files__
+
+There were several issues with the LTP reference files that needed to be remediated before they could be used.  
+__1.__  The fasta file headers had a mix of spaces and tabs, so I needed to replace both of these with underscores.  
+__2.__  The fasta file sequences had a mix of periods and hyphens to represent missing sites, so I needed to repalce periods with hyphens.  
+__3.__  The sequence names in the fasta file and the tip names in the tree file were different, making it impossible to actually map those sequences onto their     reference tree.  
+__4.__  The acutal fasta headers and tip labels were all gratuitously long and contained unnecessary information, so I wanted to clean those up to just contain the following: accession#_taxonomy(genus, species, family, etc).  
+
+To fix these issues I created a python script  __(LTP_fasta_and_tree_renamer.py)__ to correct these issues and then output corrected fasta and tree files. This script also produces a CSV file containing all the extra info from the sequence headers.  
   
-<pre> 
-bioawk -c fastx '{ print $name, length($seq) }' < archaea-250bp.fa > archaea-250bp-lengths.txt  
-#commands for bacteria were the same as for archaea.  
-</code></pre>   
+### __OTU clustering via [CD-hit](https://github.com/weizhongli/cdhit)__   
 
-The *-lengths.txt files were imported into the following .r code to create the following distribution plots:    
+Used a sequence identity threshold (-c) of 0.97 as that's the common cutoff in traditional metabarcoding studies.  
   
-```{r , echo=FALSE, warning=FALSE, message=FALSE}
-#completed on 2019-03-06
-
-library(ggplot2)
-library(reshape)
-library(plyr)
-theme_set(theme_classic())
-
-#reading in the tab delimited .txt files
-
-a.250.len <- read.delim("~/projects/bacteria-diatom-16s/docs/proj-journal/archaea-250bp-lengths.txt", header=FALSE)
-a.500.len <- read.delim("~/projects/bacteria-diatom-16s/docs/proj-journal/archaea-500bp-lengths.txt", header=FALSE)
-b.250.len <- read.delim("~/projects/bacteria-diatom-16s/docs/proj-journal/bacteria-250bp-lengths.txt", header=FALSE)
-b.500.len <- read.delim("~/projects/bacteria-diatom-16s/docs/proj-journal/bacteria-500bp-lengths.txt", header=FALSE)
-
-#prepare the data by removing names and combinging lists
-
-colnames(a.250.len)[colnames(a.250.len)=="V2"] <- "a250bp"
-colnames(b.250.len)[colnames(b.250.len)=="V2"] <- "b250bp"
-colnames(a.500.len)[colnames(a.500.len)=="V2"] <- "a500bp"
-colnames(b.500.len)[colnames(b.500.len)=="V2"] <- "b500bp"
-
-
-a.500.len = subset(a.500.len, select = -c(V1))
-b.500.len = subset(b.500.len, select = -c(V1))
-a.250.len = subset(a.250.len, select = -c(V1))
-b.250.len = subset(b.250.len, select = -c(V1))
-
-mcat.a.250 <- melt(a.250.len)
-mcat.b.250 <- melt(b.250.len)
-mcat.a.500 <- melt(a.500.len)
-mcat.b.500 <- melt(b.500.len)
-
-final <- rbind(mcat.a.250, mcat.a.500, mcat.b.250, mcat.b.500)
-
-#generates means for our plots
-final.mu <- ddply(final, "variable", summarise, grp.mean=mean(value))
-
-
-#density plot
-hist.lab <- list(
-  'a250bp'="Archaea, total=57",
-  'a500bp'="Archaea, total=31",
-  'b250bp'="Bacteria, total=11865",
-  'b500bp'="Bacteria, total=2508"
-  )
-
-labeller <- function(variable,value){
-  return(hist.lab[value])
-}
-
-
-ggplot(final, aes(x=value, fill=variable)) +
-  geom_density(alpha=0.8) +
-  scale_fill_brewer(palette="Dark2") + 
-  theme_minimal() +
-  facet_wrap(variable ~ ., scales = "free", labeller = labeller) +
-  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
-  geom_vline(data=final.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-  scale_color_brewer(palette="Dark2")
-
-###################
-#histogram version#
-###################
-
-
-ggplot(final, aes(x=value, fill=variable)) +
-  geom_histogram(aes(x=value), binwidth = 15, alpha=0.9) +
-  scale_fill_brewer(palette="Dark2") + 
-  theme_minimal() +
-  facet_wrap(variable ~ ., scales = "free", labeller = labeller) +
-  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
-  geom_vline(data=final.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-  scale_color_brewer(palette="Dark2")
-
-
-################################
-#histogram with density overlay#
-################################
-
-#ggplot(final, aes(x=value,fill=variable)) + 
-#  geom_histogram(aes(y=..density..), binwidth=15)+
-#  geom_density(alpha=0) +
-#  scale_fill_brewer(palette="Dark2") + 
-#  theme_minimal() +
-#  facet_wrap(variable ~ ., scales="free") +
-#  scale_y_continuous(name="density",  limits = c(0,0.008)) +
-#  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0,1750)) +
-#  geom_vline(data=mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-#  scale_color_brewer(palette="Dark2") 
-```
-
-Horizontal dashed lines indicate the count values of 250 and 125, respectively.  
-  
-    
-#### Sequence clustering  
-##### Date:   
-
-Need to choose between [USEARCH](https://www.drive5.com/usearch/manual/) and [CD-hit](https://github.com/weizhongli/cdhit).  
-
-Installed cd-hit and usearch on Zucchini, updated $PATH so I can use the aforementioned names as commands.  
-
-
-##### [CD-hit](https://github.com/weizhongli/cdhit)  
-
-using a sequence identity threshold (-c) of 0.99, 0.97, and 0.98 respectively to see how much each of these reduces the amount of sequences.  
-  
-Here is an example of the codes used. only the -c flag was modified in the 0.97 and 0.90 analyses.
+The following is the code used to execute the analyses.  
 <pre><code>
-cd-hit-est -i Archaea_250bp.fa -o archaea-250bp.cdhit.fa -c 0.99 -n 10 -d 0 -M 8000 -T 4  
-cd-hit-est -i archaea_500bp.fa -o archaea-500bp.cdhit.fa -c 0.99 -n 10 -d 0 -M 8000 -T 4  
+cd-hit-est -i Archaea_250bp.fa -o archaea-250bp.cdhit.fa -c 0.97 -n 10 -d 0 -M 8000 -T 4  
 </code></pre> 
   
-resulting files are stored in the directories cdhit-c99, cdhit-97, cdhit-90  
+resulting files are stored in the directory cdhit-97.  
   
 I used grep -c ">" on the resulting .fa files to find how many redundant sequences were removed.  
 
@@ -231,13 +193,11 @@ Used bioawk once again to get sequence lengths for the resulting.fa files:
   
 <pre><code>
 bioawk -c fastx '{ print $name, length($seq) }' < archaea-250bp.cdhit.fa > cat-250bp-cd-len.txt  
-bioawk -c fastx '{ print $name, length($seq) }' < archaea-500bp.cdhit.fa > cat-500bp-cd-len.txt  
 </code></pre> 
 
-Below are the graphs for each CD-hit run.  
+Using the same r code as previously, I plotted the following distributions for my data.   
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
-#completed on 2019-03-06
 
 library(ggplot2)
 library(reshape)
@@ -245,163 +205,37 @@ library(plyr)
 theme_set(theme_classic())
 
 #reading in the tab delimited .txt files
+a97.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-250bp-cd-len.txt", header=FALSE)
+b97.250.len <- read.delim("/home/cory/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-250bp-cd-len.txt", header=FALSE)
 
-a99.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/archaea-250bp-cd-len.txt", header=FALSE)
-a99.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/archaea-500bp-cd-len.txt", header=FALSE)
-b99.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/bacteria-250bp-cd-len.txt", header=FALSE)
-b99.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c99/bacteria-500bp-cd-len.txt", header=FALSE)
-
-a98.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/archaea-250bp-cd-len.txt", header=FALSE)
-a98.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/archaea-500bp-cd-len.txt", header=FALSE)
-b98.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/bacteria-250bp-cd-len.txt", header=FALSE)
-b98.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c98/bacteria-500bp-cd-len.txt", header=FALSE)
-
-a97.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-250bp-cd-len.txt", header=FALSE)
-a97.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/archaea-500bp-cd-len.txt", header=FALSE)
-b97.250.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-250bp-cd-len.txt", header=FALSE)
-b97.500.len <- read.delim("/home/cbg/projects/bacteria-diatom-16s/data/cdhit/cdhit-c97/bacteria-500bp-cd-len.txt", header=FALSE)
 
 #prepare the data by removing names and combinging lists
-
-colnames(a99.250.len)[colnames(a99.250.len)=="V2"] <- "a250bp"
-colnames(a99.500.len)[colnames(a99.500.len)=="V2"] <- "a500bp"
-colnames(b99.250.len)[colnames(b99.250.len)=="V2"] <- "b250bp"
-colnames(b99.500.len)[colnames(b99.500.len)=="V2"] <- "b500bp"
-
-colnames(a98.250.len)[colnames(a98.250.len)=="V2"] <- "a250bp"
-colnames(a98.500.len)[colnames(a98.500.len)=="V2"] <- "a500bp"
-colnames(b98.250.len)[colnames(b98.250.len)=="V2"] <- "b250bp"
-colnames(b98.500.len)[colnames(b98.500.len)=="V2"] <- "b500bp"
-
 colnames(a97.250.len)[colnames(a97.250.len)=="V2"] <- "a250bp"
-colnames(a97.500.len)[colnames(a97.500.len)=="V2"] <- "a500bp"
 colnames(b97.250.len)[colnames(b97.250.len)=="V2"] <- "b250bp"
-colnames(b97.500.len)[colnames(b97.500.len)=="V2"] <- "b500bp"
 
 #remove the first column
-a99.250.len = subset(a99.250.len, select = -c(V1))
-a99.500.len = subset(a99.500.len, select = -c(V1))
-b99.250.len = subset(b99.250.len, select = -c(V1))
-b99.500.len = subset(b99.500.len, select = -c(V1))
-
-a98.250.len = subset(a98.250.len, select = -c(V1))
-a98.500.len = subset(a98.500.len, select = -c(V1))
-b98.250.len = subset(b98.250.len, select = -c(V1))
-b98.500.len = subset(b98.500.len, select = -c(V1))
-
 a97.250.len = subset(a97.250.len, select = -c(V1))
-a97.500.len = subset(a97.500.len, select = -c(V1))
 b97.250.len = subset(b97.250.len, select = -c(V1))
-b97.500.len = subset(b97.500.len, select = -c(V1))
+
 
 
 #melt them to create the variable column indicating how they were processed
-a99.250.len <- melt(a99.250.len)
-a99.500.len <- melt(a99.500.len)
-b99.250.len <- melt(b99.250.len)
-b99.500.len <- melt(b99.500.len)
-
-a98.250.len <- melt(a98.250.len)
-a98.500.len <- melt(a98.500.len)
-b98.250.len <- melt(b98.250.len)
-b98.500.len <- melt(b98.500.len)
-
 a97.250.len <- melt(a97.250.len)
-a97.500.len <- melt(a97.500.len)
 b97.250.len <- melt(b97.250.len)
-b97.500.len <- melt(b97.500.len)
 
-#bind the dataframes for each kingdom/ssu-align run in each -c value of CD-hit that we've run
-c99.final <- rbind(a99.250.len, a99.500.len, b99.250.len, b99.500.len)
-c98.final <- rbind(a98.250.len, a98.500.len, b98.250.len, b98.500.len)
-c97.final <- rbind(a97.250.len, a97.500.len, b97.250.len, b97.500.len)
+#bind the dataframes for each domain/ssu-align run in each -c value of CD-hit that we've run
+c97.final <- rbind(a97.250.len, b97.250.len)
 
 
 #generates means for our plots
-c99.mu <- ddply(c99.final, "variable", summarise, grp.mean=mean(value))
-c98.mu <- ddply(c98.final, "variable", summarise, grp.mean=mean(value))
 c97.mu <- ddply(c97.final, "variable", summarise, grp.mean=mean(value))
 
-#############
-#c99 density#
-#############
-c99.hist.lab <- list(
-  'a250bp'="Archaea, total=24",
-  'a500bp'="Archaea, total=16",
-  'b250bp'="Bacteria, total=7829",
-  'b500bp'="Bacteria, total=1829"
-  )
-
-c99.labeller <- function(variable,value){
-  return(c99.hist.lab[value])
-}
-
-#ggplot(c99.final, aes(x=value, fill=variable)) +
-#  geom_density(alpha=0.8) +
-#  scale_fill_brewer(palette="Dark2") + 
-#  theme_minimal() +
-#  facet_wrap(variable ~ ., scales = "free", labeller = c99.labeller) +
-#  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
-#  geom_vline(data=c99.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-#  scale_color_brewer(palette="Dark2")
-
-################
-#c99 histogram #
-################
-
-ggplot(c99.final, aes(x=value, fill=variable)) +
-  geom_histogram(aes(x=value), binwidth = 15, alpha=0.9) +
-  scale_fill_brewer(palette="Dark2") + 
-  theme_minimal() +
-  facet_wrap(variable ~ ., scales = "free", labeller = c99.labeller) +
-  scale_x_continuous(name="c99 seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
-  geom_vline(data=c99.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-  scale_color_brewer(palette="Dark2")
-
-#############
-#c98 density#
-#############
-c98.hist.lab <- list(
-  'a250bp'="Archaea, total=22",
-  'a500bp'="Archaea, total=13",
-  'b250bp'="Bacteria, total=6596",
-  'b500bp'="Bacteria, total=1638"
-  )
-
-c98.labeller <- function(variable,value){
-  return(c98.hist.lab[value])
-}
-
-#ggplot(c99.final, aes(x=value, fill=variable)) +
-#  geom_density(alpha=0.8) +
-#  scale_fill_brewer(palette="Dark2") + 
-#  theme_minimal() +
-#  facet_wrap(variable ~ ., scales = "free", labeller = c98.labeller) +
-#  scale_x_continuous(name="Seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
-#  geom_vline(data=c99.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-#  scale_color_brewer(palette="Dark2")
-
-################
-#c98 histogram #
-################
-
-ggplot(c98.final, aes(x=value, fill=variable)) +
-  geom_histogram(aes(x=value), binwidth = 15, alpha=0.9) +
-  scale_fill_brewer(palette="Dark2") + 
-  theme_minimal() +
-  facet_wrap(variable ~ ., scales = "free", labeller = c98.labeller) +
-  scale_x_continuous(name="c98 seqeunce length", breaks = c(0,250,500,750,1000,1250,1500,1750), limits = c(0, 1750)) +
-  geom_vline(data=c98.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
-  scale_color_brewer(palette="Dark2")
-
-#############
+##########
 #c97 density#
-#############
+##########
 c97.hist.lab <- list(
   'a250bp'="Archaea, total=19",
-  'a500bp'="Archaea, total=11",
-  'b250bp'="Bacteria, total=5604",
-  'b500bp'="Bacteria, total=1451"
+  'b250bp'="Bacteria, total=5604"
   )
 
 c97.labeller <- function(variable,value){
@@ -417,9 +251,9 @@ c97.labeller <- function(variable,value){
 #  geom_vline(data=c97.mu, aes(xintercept=grp.mean, color=variable), linetype="dashed") +
 #  scale_color_brewer(palette="Dark2")
 
-################
+############
 #c97 histogram #
-################
+############
 
 ggplot(c97.final, aes(x=value, fill=variable)) +
   geom_histogram(aes(x=value), binwidth = 15, alpha=0.9) +
@@ -431,11 +265,14 @@ ggplot(c97.final, aes(x=value, fill=variable)) +
   scale_color_brewer(palette="Dark2")
 ```
 
+Table 1. Data attenuation after CD-hit OTU clustering at 97 ident.  
+  
+domain | All | 250bp | CD-hit.c97 
+--- | --- | --- | --- | 
+Archaea | 67 | 57 | 19 |  
+Bacteria | 18385 | 11865 | 5604 |   
 
-
-#### Aligning archae and bacterial sequences  
-
-Andy recommends proceeding using the c97 250bp .fa files for phylogenetic inferences.
+### __Aligning archaeal and bacterial sequences__  
 
 Before RAxML phylogenetic inferences, must align and mask all of the individual fasta files from the transcriptomes.  
 To accomplish this I used the SSU-ALIGN package from before, then masked them using the default masking (-d) as implemetned in the ssu-mask command.  
@@ -444,38 +281,51 @@ Accomplished this by using the following commands.
   
 <pre><code>
 ssu-align -f archaea-250bp.cdhit.fa archaea-out  
-ssu-mask -d --afa archae-out/
+ssu-mask -d --afa archaea-out/
 </code></pre> 
 
 ssu-align found that 5 of the 19 archaea sequences were misidentified bacterial sequences.  
 These were then concatenated with the bacteria cdhit .fa file and ssualign was performed for the bacterial sequences.  
+  
+Table 1. Data attenuation after 2nd SSU-align and concatenating misidentifed sequences.  
+  
+domain | All | SSU-ALIGN.250bp | CD-hit.c97 | SSU-ALIGN.alignment |
+--- | --- | --- | --- | --- |
+Archaea | 67 | 57 | 19 | 14 |  
+Bacteria | 18385 | 11865 | 5604 | 5609 |   
 
-#### Profile alignment using MUSCLE  
-Now that we've aligned and masked our sequences using ssu-align, we must create a profile alignment of our indv bacterial and archaea alignments against the silva LTP almt, using MUSCLE.    
 
-Used the following code to align our archaea .afa against the LTP_132 .afa
+### __Profile alignment using MUSCLE__  
+  
+Now that I've aligned and masked the sequences using ssu-align, I need to create a profile alignment of our individual bacterial and archaeal alignments against the Silva LTP alignment using MUSCLE. 
+
+Because of the large amount of processing power this alignment type needs I used the AHPCC Razor cluster to conduct my profile alignment.  
+
+I used the following PBS script to submit my MUSCLE commands to the cluster and align our archaea .afa against the LTP_132 .afa
 <pre><code>
-muscle -profile -in1 LTPs132_SSU_aligned.fasta -in2 archaea-out.archaea.mask.afa -out archaea-LTP132_aligned.afa  
+#!/bin/bash
+
+#PBS -N muscle
+#PBS -q mem512GB64core
+#PBS -j oe
+#PBS -m abe
+#PBS -M cbgargas@uark.edu
+#PBS -o muscle.$PBS_JOBID
+#PBS -l nodes=1:ppn=64
+#PBS -l walltime=00:72:00:00
+
+cd $PBS_O_WORKDIR
+
+module purge
+module load muscle/3.8.31
+
+muscle -profile -in1 LTPs132_SSU_aligned.fasta -in2 archaea-out.archaea.mask.afa -out archaea-LTP132_aligned.afa 
 </code></pre> 
-  
-It might also be a good idea to try aligning the compressed LTP132 .fa file with ssu-align and ssu-mask, then merging the resulting almt with the archaea-out.archaea.mask.afa almt by using the ssu-prep .sh script (which performs ssu-merge).  
 
-.  
-.  
-.  
 
-##### Data attenuation (as of 2019-03-27)
-
-. | AJA initial stuff | ssu-align-domain assgnmt | cdhit.99 | cdhit.98 | cdhit.97 | ssualign of indv transcriptome files
---- | --- | --- | --- | --- | --- | ---
-archae-all | 67 | - | - | - | -  | 
-archaea-250bp | - | 57 | 24 | 22 | 19 | 14 |  
-bacteria-all | 18385 | - | - | - | - | - |
-bacteria-250bp | - | 11865 | 7829 | 6596 | 5604 | 5609 |
-
+The above pbs script was generated using the python script __pbs-script-gen.py.__
   
 
-# _FIN_  
-  
-# _?_  
+# __*FIN*__  
+
 
