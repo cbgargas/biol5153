@@ -155,14 +155,15 @@ Analysis of ash-free dry weight, ATP, & chlorophyll-a (via spectrophotomety & fl
 #### PROFESSIONAL AFFILIATIONS
 <div class = "row">
 <div class = "col-md-2">
-**2019-present**
-**2019-present**
-**2017-present** 
+**2019-present**  
+<br>  
+**2017-present**   
 </div>
 
 <div class = "col-md-10">
 **International society for Diatom Research (ISDR)**  
 **International Association for Plant Taxonomy (IAPT)**  
+<br>
 **Phycological Society of America (PSA)**  
 </div>
 
@@ -202,3 +203,15 @@ Analysis of ash-free dry weight, ATP, & chlorophyll-a (via spectrophotomety & fl
 </div>
 <br>
 <br>
+
+#### COMMUNITY SERVICE 
+<div class = "row">
+<div class = "col-md-1">
+**2019-Present**  
+</div>
+
+<div class = "col-md-11">
+Reviewer for the following scientific journals:   
+    __Phytotaxa__  
+    __Diatom Research__  
+</div>
